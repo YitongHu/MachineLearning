@@ -1,0 +1,143 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% CSC C11 - Assignment 2 - Clustering
+%
+% Record here your answers to the questions in the handout for
+% part 2 of the assignment.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% COMPLETE THIS TEXT BOX:
+%
+% 1) Student Name:Suren Gnanaranjan		
+% 2) Student Name:Yitong Hu		
+%
+% 1) Student number: 1000698328
+% 2) Student number:1001716869
+% 
+% 1) UtorID:gnanaran
+% 2) UtorID:huyi10
+% 
+% We hereby certify that the work contained here is our own
+%
+% __Suren Gnanaranjan__             ____Yitong_Hu_______
+% (sign with your name)            (sign with your name)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% EACH ANSWER MUST BE NO MORE THAN 3 LINES OF TEXT - LONGER
+% ANSWERS WILL BE IGNORED
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%  Step 2
+
+1) Which algorithm gives more 'natural' results? (i.e. which produces clusters
+   that more closely approximate what you believe are distinct image regions?)
+K-Means gives more 'natural' results than GMM when looking at a reasonable cluster size. GMM would
+require a lot high clusters for a more precise cluster picture, whereas K-Means produces a more natural image
+with a low amount of clusters. GMM clusters wrongly on low clusters, maybe due to overlaps. 
+
+2) Which algorithm gives better clustering results in terms of data similarity?
+   (that means, purely in terms of RGB similarity, not your subjective perception
+   of what makes an image region)
+GMM gives better clustering results in terms of data similarity and a significant increase
+in clusters would allow for a more accurate depiction, k-means would cap out at a certain amount
+of clusters. 
+
+3) Which method would you expect to work best in general for RGB clustering,
+   given plots such as the one at the start of this section (the image of London
+   and the corresponding points in RGB space)
+I would expect K-Means to work best in gerenal for RGB clustering, as GMM may over lap data set
+and requires a large amount of data for clustering, while k-means can work well with small amount of clusters
+as here we look only at RGB. 
+
+
+4)  What kinds of pre-processing can you think of that would have helped the
+    clustering process (and why would they have helped)?
+Some pre-processing would be not randomizing centers at initialization, looking at the data
+and knowing how many clusters would be required and so using a better method. Avoid multiple restarts
+by better knowing the data and what is required. 
+
+
+%%  Step 3
+
+1) What is the average sparsity of input vectors? (in [0, 1])
+We do the count of values that are non - zero, and divide by total, and then do 1 minus this.
+The sparcity of 0 is .9866 which means it occurs 98% of the data frame created.
+Which means that <1% are 1's.
+
+2) Find what are the 10 most common terms, find what are the 10 least common terms. 
+   (list, separated by commas)
+10 most: game, film, goven, elect, bank, year, firm, technology, people, test
+10 least: open, home, vote, bbc, blair, jone, media, chip, image, help
+   
+3) What is the average frequency for non-zero vector entries?
+The average frequence for non zero is 1 - 0.9866 = 0.0134, or .1%.
+
+%% Step 3.1
+
+1) What is the size of each cluster? (list numbers, comma separated)
+(267,235,283,261,282)
+2) Does the clustering make sense?
+The clustering does make sense as the clusters are sorted by relatively similar topic and the replications are words
+that fall under multiple topics. 
+
+3) What is the topic for each cluster? (list, comma separated)
+(music, conflict, radio, business, politics)
+
+4) What factors make clustering difficult?
+Having overlapping data that could fall into multiple categories(clusters), having a right amount of clusters to 
+sort our data. Clusters are arbitrary, there is no fixed object in a cluster other than what we specify. Having lack 
+of knowledge on the data be evaluated.
+
+5) Will we get better results with a lucky initial guess for cluster centers?
+   (yes/no and a short explanation of why)
+Yes, with lucky initial guess on cluster centers we have a good starting point to categorize our data and seperate them
+accordingly. Not many words would end up in the wrong cluter due to overlap in data.   
+
+%% Step 3.2
+
+1) What problem from 3.1 is solved now?
+The problem solved is that words are better organized, words with higher unit mass would be more likely being selected as a group of topics. Therefore we can now have a better idea of the 
+topic in each cluster. It removed words that had low frequency, therefore the topics made more sense. 
+
+2) What is the size of each cluster?
+(234,237,296,202,230)
+
+3) Does the clustering make sense?
+The clustering now does make more sense than 3.1, as the words are better allocated and words 
+with lower probability are filtered out so the topics of each cluster are clearer. 
+
+4) What are the topics for clusters?
+(hollywood, politics, economy, money, tech)
+
+5) Is the result better or worse? (give a short explanation as well)
+The result is better as useless words are less occuring and the words are better categorized
+which makes the true topic of each cluster more dominent. 
+
+%% Step 3.3
+
+1) What are the sizes for clusters now?
+(183,174,167,178,171)
+
+2) Does the clustering make sense?
+The clustering makes alot more sense than the last 2 runs, as more words were filtered
+and because words with strong assocciation are grouped together based on word 
+co-occurance probabilities. 
+
+3) What are the topics for clusters?
+(entertainment, bbc, technology, buisiness, politics)
+
+4) Why is the clustering better now?
+There are weights added to each term and since there are 2-step random walk based on
+co-occurence probabilities, compared on the entire data-set,so words with strong
+assocciation are put together and so the clusters have better word categorization.
+
+5) What is the general lesson you learned in clustering sparse, high-dimensional
+   data?
+We have learned that very lucky guesses can differ the types of output obtained greatly, 
+the right methods should be used for the right data. More clusters lead to a more accurate prediction.
+Also higher dimensions are hard to cluster because the distance calculation won't be able to detect relative distances.
+   
+%%%%%%%%%%%%% End of questions %%%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -1,0 +1,160 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% CSC C11 - Assignment 2 - Gaussian Mixture Models clustering
+%
+% In this function, you will implement Gaussian Mixture Models.
+%  the mixture models can be initialized randomly, or with the
+%  given initial centers.
+%  Covariance matrices are initialized to identity.
+%
+% function [centers,covariances,labels]=GMMs(data,cent_init,k)
+%
+% Inputs: data - an array of input data points size n x d, with n 
+%                input points (one per row), each of length d.
+%         k - number of clusters
+%         cent_init - either an empty array '[]', or an array of
+%                     size k x d, with k initial cluster centers
+%
+% Outputs: centers - Final cluster centers
+%          covariances - Covariance matrices for the GMM components,
+%                        this will be an array of size
+%                        d x d x k, with each 'layer' of size
+%                        d x d corresponding to the covariance
+%                        matrix of one of the Gaussians in the model.
+%          mps - An array of size k x 1, with mixture proportions
+%                giving the percent of data assigned to each
+%                cluster. The sum of these has to be 1.
+%          labels - An array of size n x 1, with labels indicating
+%                   which cluster each input point belongs to.
+%                   e.g. if data point i belongs to cluster j,
+%                   then labels(i)=j
+%
+% Starter code: F. Estrada, Sep. 2017
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% COMPLETE THIS TEXT BOX:
+%
+% 1) Student Name:Suren Gnanaranjan	
+% 2) Student Name:Yitong Hu		
+%
+% 1) Student number:1000698328
+% 2) Student number:1001716869
+% 
+% 1) UtorID:gnanaran
+% 2) UtorID:huyi10
+% 
+% We hereby certify that the work contained here is our own
+%
+% __Suren Gnanaranjan____          _______Yitong Hu_______
+% (sign with your name)            (sign with your name)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+function [centers,covariances,mps,labels]=GMMs(data,cent_init,k)
+
+% Initialize all the arrays we will need
+centers=zeros(k,size(data,2));
+labels=zeros(size(data,1),1);
+mps=ones(k,1)/k;
+covariances=zeros([size(data,2) size(data,2) k]);
+for i=1:k
+ covariances(:,:,i)=eye(size(data,2),size(data,2));
+end;
+
+if (isempty(cent_init))
+  % Initial centers is an empty array, choose initial centers
+  % randomly
+
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  % TO DO: Complete this part so that your code chooses k initial
+  %        centers randomly. This comes down to picking random
+  %        entries in your data array.
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  centers=datasample(data,k);
+
+  
+else
+  if (size(cent_init,1)~=k | size(cent_init,2)~=size(data,2))
+    fprintf(2,'Initial centers array has wrong dimensions.'\n');
+    return;
+  end;
+  centers=cent_init;
+end; 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% TO DO: Complete the function by implementing the E-M algorithm for
+%  estimating the parameters of a Gaussian Mixture Model
+% 
+%        As a reminder, this is a loop that:
+%          * Assigns data points to the cluster that gives it maximum 
+%            likelihood
+%          * Updates the cluster centers, covariances, and mixture 
+%            proportions
+%          * Update the labels array to contain the index of the
+%            cluster center each point is assigned to
+%        Loop ends when the labels do not change from one iteration
+%         to the next. 
+%
+%  DO NOT compute ownership probabilities for data points using
+%   a for loop over data points. Doing so will cause you to wait
+%   forever for this thing to converge. Your TA certainly won't
+%   wait that long.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+prev_label = ones(size(data,1),1);
+while (isequal(labels, prev_label) ~= 1)
+    prev_label = labels;
+    prob = 0;
+    weight=[];
+    for i = 1:k
+%         part1_denom = sqrt(((2*pi)^size(data,2)) * det(covariances(:,:,i)));
+%         nontranspose = (data - centers(i,:));
+%         transpose = (data - centers(i,:))';
+%      
+%         exp_num_1 = sum(nontranspose*inv(covariances(:,:,i)).*nontranspose);
+%         probability = (mps(i)/part1_denom).* exp((-0.5)*(exp_num_1));
+%         
+%         prob = sum(probability,2);
+        
+        prob = prob + (mps(i)*mvnpdf(data,centers(i,:),covariances(:,:,i)));
+     
+    end
+    
+    for l = 1:k
+%         part1_denom = sqrt(((2*pi)^size(data,2)) * det(covariances(:,:,l)));
+%         nontranspose2 = (data - centers(l,:));
+%         transpose2 = (data - centers(l,:))';
+%         
+%         exp_num_2 = sum(nontranspose2*inv(covariances(:,:,l)).*nontranspose2);
+%         probability = (mps(l)/part1_denom).* exp((-0.5)*(exp_num_2));
+%         
+%         weight = [weight (mps(l,:)*size(data,1)*probability)];
+        
+        weight = [weight (mps(l)*mvnpdf(data,centers(l,:),covariances(:,:,l)))];
+        
+    end        
+   
+    [M,labels] = max(weight,[],2);
+    
+    prevmu = centers;
+    
+    for j = 1:k
+        clustlabel = (labels==j);
+        clustsize = nnz(labels==j);
+        a = clustlabel.*data;
+        % update weight
+        mps(j) = clustsize/size(data,2);
+        % update mean.
+        centers(j,:) = sum(a)/clustsize;
+        % update covariance
+        covariances(:,:,j)= ((data(labels(:, 1) == j,:)-centers(j,:))'*(data(labels(:,1)==j,:)-centers(j,:)))./size(data(labels(:,1)==j,:),1);
+    end
+    
+    if (isequal(centers, prevmu) == 1)
+        break
+    end
+end
+

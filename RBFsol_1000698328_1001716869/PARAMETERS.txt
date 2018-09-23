@@ -1,0 +1,13 @@
+Student 1 Name: Suren Gnanaranjan
+Student 2 Name: Yitong Hu
+Student 1 Student number: 1000698328
+Student 2 Student number: 1001716869
+Student 1 UtorID: gnanaran
+Student 2 UtorID: huyi10
+
+Optimal parameter for inpainting
+RBF_image_inpainting('Amazing_jellyfish_corrupted_by_text.tif',3,2);
+
+
+Optimal parameters for denoising
+RBF_image_denoising('Noisy_turtles_small.tif',1,1,0.5);
